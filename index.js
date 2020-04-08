@@ -4,7 +4,15 @@ const massive = require('massive')
 
 const app = express()
 
-const { SERVER_PORT } = process.env
+const { SERVER_PORT, CONNECTION_STRING } = process.env
+
+massive({
+    connectionString: CONNECTION_STRING,
+    ssl: {rejectUnauthorized: false}
+}).then(dbInstance => {
+    app.set('db', dbInstance)
+}).catch(err => console.log(err))
+
 
 app.use(express.json())
 
